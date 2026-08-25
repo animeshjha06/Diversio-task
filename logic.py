@@ -48,7 +48,7 @@ def read_csv_file(uploaded_file):
         employee = {}
         employee["row_number"] = row_number
 
-        # Normalize the employee ID field.
+        # standardize the employee ID field.
         employee_id = raw_row.get("employee_id")
 
         if employee_id is None:
@@ -56,7 +56,7 @@ def read_csv_file(uploaded_file):
 
         employee["employee_id"] = employee_id.strip()
 
-        # Normalize the employee name field.
+        # standardize the employee name field.
         employee_name = raw_row.get("employee_name")
 
         if employee_name is None:
@@ -64,7 +64,7 @@ def read_csv_file(uploaded_file):
 
         employee["employee_name"] = employee_name.strip()
 
-        # Normalize and lowercase the employee email field.
+        # standardize and lowercase the employee email field.
         email = raw_row.get("email")
 
         if email is None:
@@ -72,7 +72,7 @@ def read_csv_file(uploaded_file):
 
         employee["email"] = email.strip().lower()
 
-        # Normalize the manager ID field.
+        # standardize the manager ID field.
         manager_id = raw_row.get("manager_id")
 
         if manager_id is None:
@@ -80,7 +80,7 @@ def read_csv_file(uploaded_file):
 
         employee["manager_id"] = manager_id.strip()
 
-        # Normalize and lowercase the manager email field.
+        # standardize and lowercase the manager email field.
         manager_email = raw_row.get("manager_email")
 
         if manager_email is None:
@@ -88,7 +88,7 @@ def read_csv_file(uploaded_file):
 
         employee["manager_email"] = manager_email.strip().lower()
 
-        # Normalize the department field.
+        # standardize the department field.
         department = raw_row.get("department")
 
         if department is None:

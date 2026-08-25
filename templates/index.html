@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>HRIS Import Preview</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>HRIS Import Preview</h1>
+
+    <!-- Upload CSV -->
+    <form action="/analyze" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv" required>
+      <button type="submit">Analyze CSV</button>
+    </form>
+
+    <!-- Error -->
+    {% if error %}
+    <div class="error-box">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    {% if total_rows is defined %}
+
+    <!-- Summary -->
+    <h2>Summary</h2>
+
+    <div class="summary">
+      <div><strong>{{ total_rows }}</strong> Total Rows</div>
+      <div><strong>{{ accepted_count }}</strong> Accepted</div>
+      <div><strong>{{ errors|length }}</strong> Errors</div>
+      <div><strong>{{ roots|length }}</strong> Root Employees</div>
+      <div><strong>{{ cyclic_employees|length }}</strong> In a Cycle</div>
+    </div>
+
+
+    <!-- Validation Errors -->
+    <h2>Validation Errors</h2>
+
+    {% if errors %}
+    <ul>
+      {% for error in errors %}
+      <li>
+        Row {{ error.row_number }}: {{ error.message }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No validation errors.</p>
+    {% endif %}
+
+
+    <!-- Root Employees -->
+    <h2>Root Employees (No Manager)</h2>
+
+    {% if roots %}
+    <ul>
+      {% for employee in roots %}
+      <li>
+        {{ employee.employee_name }}
+        ({{ employee.employee_id }})
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No root employees found.</p>
+    {% endif %}
+
+
+    <!-- Managers -->
+    <h2>Managers & Direct Reports</h2>
+
+    {% if managers %}
+    <table>
+      <tr>
+        <th>Manager</th>
+        <th>Employee ID</th>
+        <th>Direct Reports</th>
+      </tr>
+
+      {% for manager in managers %}
+      <tr>
+        <td>{{ manager.employee.employee_name }}</td>
+        <td>{{ manager.employee.employee_id }}</td>
+        <td>{{ manager.report_count }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p>No managers found.</p>
+    {% endif %}
+
+
+    <!-- Cycles -->
+    <h2>Employees in a Reporting Cycle</h2>
+
+    {% if cyclic_employees %}
+    <ul>
+      {% for employee in cyclic_employees %}
+      <li>
+        {{ employee.employee_name }}
+        ({{ employee.employee_id }})
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No reporting cycles found.</p>
+    {% endif %}
+
+    {% endif %}
+
+  </div>
+
+</body>
+
+</html>
